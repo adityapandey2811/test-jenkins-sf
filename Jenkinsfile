@@ -1,45 +1,43 @@
 pipeline {
-    agent any
+    agent any 
 
     stages {
-        stage('Fetch Code') {
+        stage('Checkout') {
             steps {
-                // Checkout code from GitHub using token authentication
-                checkout([$class: 'GitSCM',
-                          branches: [[name: '*/main']],
-                          doGenerateSubmoduleConfigurations: false,
-                          extensions: [[$class: 'CleanBeforeCheckout']],
-                          submoduleCfg: [],
-                          userRemoteConfigs: [[url: 'https://github.com/adityapandey2811/test-jenkins-sf.git',
-                                               credentialsId: 'github-tkn']]])
+                checkout scm
             }
         }
-        // stage('Run Tests') {
-        //     steps {
-        //         // Authenticate with your Salesforce development org
-        //         bat 'sfdx force:auth:jwt:grant -i 3MVG9pRzvMkjMb6nuaDwq1YNacTuPNITGteqqF0TILP6cyBvxqBPYmFvSsA8SrYOtqBuTmabDIQatBxpSu5Ym -f C:/Users/adity/JWT/server.key --username chhenatoast@resilient-moose-d303ud.com -d -a MyDevOrg'
-        
-        //         // Run Apex tests
-        //         bat 'sfdx force:apex:test:run -o MyDevOrg -w 1'
-        
-        //         // Perform static code analysis using PMD
-        //         bat 'sfdx force:pmd:check -o MyDevOrg'
-        //     }
-        // }
-        stage('Package') {
+
+        stage('Authenticate with Salesforce') {
             steps {
-                // Authenticate with your Salesforce development org
+                // script {
+                //     withCredentials([usernamePassword(credentialsId: 'salesforce-creds', passwordVariable: 'SFDC_PASSWORD', usernameVariable: 'SFDC_USERNAME')]) {
+                //         bat '''
+                //         sf login --instanceurl https://login.salesforce.com --clientid YOUR_CONSUMER_KEY --clientsecret YOUR_CONSUMER_SECRET --username $SFDC_USERNAME --password $SFDC_PASSWORD
+                //         '''
+                //     }
+                // }
                 bat 'sfdx force:auth:jwt:grant -i 3MVG9pRzvMkjMb6nuaDwq1YNacTuPNITGteqqF0TILP6cyBvxqBPYmFvSsA8SrYOtqBuTmabDIQatBxpSu5Ym -f C:/Users/adity/JWT/server.key --username chhenatoast@resilient-moose-d303ud.com -d -a MyDevOrg'
-                
-                // Create a deployable package with Salesforce DX CLI
-                bat 'sfdx force:package:create -u MyDevOrg -p MyPackage -v 1.0.0'
             }
         }
-        // stage('Deploy') {
-        //     steps {
-        //         // Optionally, conditionally deploy based on successful tests
-        //         sh 'sfdx force:package:install -u MyProdOrg -p MyPackage -v 1.0.0'
-        //     }
-        // }
+
+        stage('Validate Deployment') {
+            steps {
+                bat 'sf deploy metadata preview -d C:/Users/adity/sf-md/MyProject'
+            }
+        }
+
+        stage('Manual Deployment') {
+            steps {
+                input(message: 'Approve deployment?', ok: 'Deploy')
+                bat 'sf deploy metadata -d C:/Users/adity/sf-md/MyProject'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline Execution Finished!'
+        }
     }
 }
