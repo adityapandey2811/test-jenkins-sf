@@ -23,6 +23,7 @@ pipeline {
 
         stage('Validate Deployment') {
             steps {
+                bat 'cd C:/Users/adity/sf-md/MyProject'
                 bat 'sf deploy metadata preview -d C:/Users/adity/sf-md/MyProject'
             }
         }
