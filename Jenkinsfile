@@ -1,5 +1,9 @@
 pipeline {
-    agent any 
+    agent any
+
+    environment {
+        SFDX_CLI_EXECUTABLE = 'sfdx' // Specify the Salesforce CLI executable
+    }
 
     stages {
         stage('Checkout') {
@@ -10,28 +14,30 @@ pipeline {
 
         stage('Authenticate with Salesforce') {
             steps {
-                // script {
-                //     withCredentials([usernamePassword(credentialsId: 'salesforce-creds', passwordVariable: 'SFDC_PASSWORD', usernameVariable: 'SFDC_USERNAME')]) {
-                //         bat '''
-                //         sf login --instanceurl https://login.salesforce.com --clientid YOUR_CONSUMER_KEY --clientsecret YOUR_CONSUMER_SECRET --username $SFDC_USERNAME --password $SFDC_PASSWORD
-                //         '''
-                //     }
-                // }
-                bat 'cd C:/Users/adity/sf-md/MyProject'
-                bat 'sfdx force:auth:jwt:grant -i 3MVG9pRzvMkjMb6nuaDwq1YNacTuPNITGteqqF0TILP6cyBvxqBPYmFvSsA8SrYOtqBuTmabDIQatBxpSu5Ym -f C:/Users/adity/JWT/server.key --username chhenatoast@resilient-moose-d303ud.com -d -a MyDevOrg'
+                script {
+                    // withCredentials([usernamePassword(credentialsId: 'salesforce-creds', passwordVariable: 'SFDC_PASSWORD', usernameVariable: 'SFDC_USERNAME')]) {
+                        // Change to the Salesforce DX project directory
+                        dir('C:/Users/adity/sf-md/MyProject') {
+                            // Authenticate using JWT flow
+                            bat "${SFDX_CLI_EXECUTABLE} force:auth:jwt:grant -i 3MVG9pRzvMkjMb6nuaDwq1YNacTuPNITGteqqF0TILP6cyBvxqBPYmFvSsA8SrYOtqBuTmabDIQatBxpSu5Ym -f C:/Users/adity/JWT/server.key --username chhenatoast@resilient-moose-d303ud.com -d -a MyDevOrg"
+                        }
+                    // }
+                }
             }
         }
 
         stage('Validate Deployment') {
             steps {
-                bat 'sf deploy metadata preview -d C:/Users/adity/sf-md/MyProject'
+                // Deploy metadata (replace with the appropriate command)
+                bat "${SFDX_CLI_EXECUTABLE} force:source:deploy -p force-app -u MyDevOrg"
             }
         }
 
         stage('Manual Deployment') {
             steps {
                 input(message: 'Approve deployment?', ok: 'Deploy')
-                bat 'sf deploy metadata -d C:/Users/adity/sf-md/MyProject'
+                // Perform manual deployment (replace with the appropriate command)
+                bat "${SFDX_CLI_EXECUTABLE} force:source:deploy -p force-app -u MyDevOrg"
             }
         }
     }
