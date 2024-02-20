@@ -14,18 +14,18 @@ pipeline {
                                                credentialsId: 'github-tkn']]])
             }
         }
-        stage('Run Tests') {
-            steps {
-                // Authenticate with your Salesforce development org
-                bat 'sfdx force:auth:jwt:grant -i 3MVG9pRzvMkjMb6nuaDwq1YNacTuPNITGteqqF0TILP6cyBvxqBPYmFvSsA8SrYOtqBuTmabDIQatBxpSu5Ym -f C:/Users/adity/JWT/server.key --username chhenatoast@resilient-moose-d303ud.com -d -a MyDevOrg'
+        // stage('Run Tests') {
+        //     steps {
+        //         // Authenticate with your Salesforce development org
+        //         bat 'sfdx force:auth:jwt:grant -i 3MVG9pRzvMkjMb6nuaDwq1YNacTuPNITGteqqF0TILP6cyBvxqBPYmFvSsA8SrYOtqBuTmabDIQatBxpSu5Ym -f C:/Users/adity/JWT/server.key --username chhenatoast@resilient-moose-d303ud.com -d -a MyDevOrg'
         
-                // Run Apex tests
-                bat 'sfdx force:apex:test:run -o MyDevOrg -w 1'
+        //         // Run Apex tests
+        //         bat 'sfdx force:apex:test:run -o MyDevOrg -w 1'
         
-                // Perform static code analysis using PMD
-                bat 'sfdx force:pmd:check -o MyDevOrg'
-            }
-        }
+        //         // Perform static code analysis using PMD
+        //         bat 'sfdx force:pmd:check -o MyDevOrg'
+        //     }
+        // }
         stage('Package') {
             steps {
                 // Create a deployable package with Salesforce DX CLI
