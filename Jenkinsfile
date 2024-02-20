@@ -32,6 +32,11 @@ pipeline {
                 bat 'sfdx force:package:create -u MyDevOrg -p MyPackage -v 1.0.0'
             }
         }
-        
+        // stage('Deploy') {
+        //     steps {
+        //         // Optionally, conditionally deploy based on successful tests
+        //         sh 'sfdx force:package:install -u MyProdOrg -p MyPackage -v 1.0.0'
+        //     }
+        // }
     }
 }
