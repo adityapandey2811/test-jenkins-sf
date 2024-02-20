@@ -28,6 +28,9 @@ pipeline {
         // }
         stage('Package') {
             steps {
+                // Authenticate with your Salesforce development org
+                bat 'sfdx force:auth:jwt:grant -i 3MVG9pRzvMkjMb6nuaDwq1YNacTuPNITGteqqF0TILP6cyBvxqBPYmFvSsA8SrYOtqBuTmabDIQatBxpSu5Ym -f C:/Users/adity/JWT/server.key --username chhenatoast@resilient-moose-d303ud.com -d -a MyDevOrg'
+                
                 // Create a deployable package with Salesforce DX CLI
                 bat 'sfdx force:package:create -u MyDevOrg -p MyPackage -v 1.0.0'
             }
