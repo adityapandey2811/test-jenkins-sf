@@ -17,7 +17,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 // Authenticate with your Salesforce development org
-                sh 'sfdx force:auth:jwt:grant --clientid 3MVG9pRzvMkjMb6nuaDwq1YNacTuPNITGteqqF0TILP6cyBvxqBPYmFvSsA8SrYOtqBuTmabDIQatBxpSu5Ym --jwtkeyfile C:\Users\adity\JWT\server.key --username 	chhenatoast@resilient-moose-d303ud.com --setdefaultdevhubusername -a MyDevOrg'
+                sh 'sfdx force:auth:jwt:grant --clientid 3MVG9pRzvMkjMb6nuaDwq1YNacTuPNITGteqqF0TILP6cyBvxqBPYmFvSsA8SrYOtqBuTmabDIQatBxpSu5Ym --jwtkeyfile C:/Users/adity/JWT/server.key --username 	chhenatoast@resilient-moose-d303ud.com --setdefaultdevhubusername -a MyDevOrg'
         
                 // Run Apex tests
                 sh 'sfdx force:apex:test:run -u MyDevOrg -w 1'
