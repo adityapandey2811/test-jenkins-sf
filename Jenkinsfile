@@ -17,19 +17,19 @@ pipeline {
         stage('Run Tests') {
             steps {
                 // Authenticate with your Salesforce development org
-                sh 'sfdx force:auth:jwt:grant --clientid 3MVG9pRzvMkjMb6nuaDwq1YNacTuPNITGteqqF0TILP6cyBvxqBPYmFvSsA8SrYOtqBuTmabDIQatBxpSu5Ym --jwtkeyfile C:/Users/adity/JWT/server.key --username 	chhenatoast@resilient-moose-d303ud.com --setdefaultdevhubusername -a MyDevOrg'
+                bat 'sfdx force:auth:jwt:grant --clientid 3MVG9pRzvMkjMb6nuaDwq1YNacTuPNITGteqqF0TILP6cyBvxqBPYmFvSsA8SrYOtqBuTmabDIQatBxpSu5Ym --jwtkeyfile C:/Users/adity/JWT/server.key --username 	chhenatoast@resilient-moose-d303ud.com --setdefaultdevhubusername -a MyDevOrg'
         
                 // Run Apex tests
-                sh 'sfdx force:apex:test:run -u MyDevOrg -w 1'
+                bat 'sfdx force:apex:test:run -u MyDevOrg -w 1'
         
                 // Perform static code analysis using PMD
-                sh 'sfdx force:pmd:check -u MyDevOrg'
+                bat 'sfdx force:pmd:check -u MyDevOrg'
             }
         }
         stage('Package') {
             steps {
                 // Create a deployable package with Salesforce DX CLI
-                sh 'sfdx force:package:create -u MyDevOrg -p MyPackage -v 1.0.0'
+                bat 'sfdx force:package:create -u MyDevOrg -p MyPackage -v 1.0.0'
             }
         }
         
