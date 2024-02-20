@@ -17,14 +17,14 @@ pipeline {
                 //         '''
                 //     }
                 // }
+                bat 'cd C:/Users/adity/sf-md/MyProject'
                 bat 'sfdx force:auth:jwt:grant -i 3MVG9pRzvMkjMb6nuaDwq1YNacTuPNITGteqqF0TILP6cyBvxqBPYmFvSsA8SrYOtqBuTmabDIQatBxpSu5Ym -f C:/Users/adity/JWT/server.key --username chhenatoast@resilient-moose-d303ud.com -d -a MyDevOrg'
             }
         }
 
         stage('Validate Deployment') {
             steps {
-                bat 'cd C:/Users/adity/sf-md/MyProject/force-app'
-                bat 'sf deploy metadata preview -d C:/Users/adity/sf-md/MyProject/force-app'
+                bat 'sf deploy metadata preview -d C:/Users/adity/sf-md/MyProject'
             }
         }
 
